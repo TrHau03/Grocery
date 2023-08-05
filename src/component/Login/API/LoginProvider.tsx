@@ -27,7 +27,7 @@ export const UserProvider = (props: any) => {
                 });
             const token = response.data.access_token;
             await AsyncStorage.setItem('token', token);
-            if (response.status) {setIsLoggedIn(true), setuser(response.data.user)};
+            if (response.status) { setIsLoggedIn(true), setuser(response.data.user) };
             return response;
         } catch (error) {
             console.log('Login Error: ', error);
@@ -35,30 +35,44 @@ export const UserProvider = (props: any) => {
         return false;
     }
 
-    const register = async (email: User,name :User,password :User,confirmPassword : User) => {
+    const register = async (email: User, name: User, password: User, confirmPassword: User) => {
         try {
-            console.log(email,name,password);
+            console.log(email, name, password);
             const response = await AxiosInstance().post('/user/register',
-            {
-                name: name,
-                email: email,
-                password : password,
-                confirmPassword: confirmPassword    
-            });
+                {
+                    name: name,
+                    email: email,
+                    password: password,
+                    confirmPassword: confirmPassword
+                });
             console.log(response);
-            if(!response.status){
+            if (!response.status) {
                 return false;
             }
             return true;
         } catch (error) {
-            console.log('Register Error: ',error);
+            console.log('Register Error: ', error);
         }
         return false;
     }
+    const forgotPassword = async (email: string) => {
+        console.log(email);
 
+        try {
+            const response = await AxiosInstance().post('/user/sendMail',
+                {
+                    email: email,
+                });
+            if (!response.status) return false;
+            return response;
+        } catch (error) {
+            console.log('forgotPassword Error: ', error);
+        }
+        return false;
+    }
     return (
         <UserContext.Provider
-            value={{ isLoggedIn,user, login, register }}>
+            value={{ isLoggedIn, user, login, register, forgotPassword }}>
             {children}
         </UserContext.Provider>
     )

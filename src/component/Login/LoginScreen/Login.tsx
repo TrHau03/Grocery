@@ -114,7 +114,7 @@ const Login = () => {
         </View>
       </View>
       <Pressable style={myStyle.btnForgot}
-        onPress={() => usenavigation.navigate(RootStackScreenENum.Register)}
+        onPress={() => usenavigation.navigate(RootStackScreenENum.ForgotPassword)}
       >
         <Text style={myStyle.txtForgot}>Forgot Password</Text>
       </Pressable>

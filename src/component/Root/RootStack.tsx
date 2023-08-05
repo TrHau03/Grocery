@@ -22,12 +22,14 @@ import ScreenFavorite from "../App/AppScreen/ScreenFavorite";
 import Detail_Product from "../App/AppScreen/Detail_Product";
 import { RootTab } from "../App/AppNavigation/AppNavigation";
 import Favoriteenmpty from "../App/AppScreen/Favoriteenmpty";
+import ForgotPassword from "../Login/LoginScreen/ForgotPassword";
 export enum RootStackScreenENum {
     User = 'User',
     Login = 'Login',
     Register = 'Register',
     RegisterCode = 'RegisterCode',
     RegisterPass = 'RegisterPass',
+    ForgotPassword = 'ForgotPassword',
     ScreenShop = 'ScreenShop',
     ScreenExplore = 'ScreenExplore',
     ScreenFruits = 'ScreenFruits',
@@ -54,6 +56,7 @@ export type RootStackParamList = {
     Register: undefined,
     RegisterCode: undefined,
     RegisterPass: {data: {email: string, name: string}} | undefined,
+    ForgotPassword: undefined,
     ScreenShop: undefined,
     ScreenExplore: undefined,
     ScreenFruits: {cateName: String} | undefined,
@@ -80,6 +83,7 @@ export const RootStackScreensLogin = () => {
         { id: 7, name: RootStackScreenENum.Register, component: Register, option: {} },
         { id: 8, name: RootStackScreenENum.RegisterCode, component: RegisterCode, option: {} },
         { id: 9, name: RootStackScreenENum.RegisterPass, component: RegisterPass, option: {} },
+        { id: 20, name: RootStackScreenENum.ForgotPassword, component: ForgotPassword, option: {} },
         { id: 18, name: RootStackScreenENum.RootTab, component: RootTab, option: {} },
 
     ]
