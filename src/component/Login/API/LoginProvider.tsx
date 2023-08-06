@@ -26,7 +26,9 @@ export const UserProvider = (props: any) => {
                     password: password
                 });
             const token = response.data.access_token;
-            await AsyncStorage.setItem('token', token);
+            const user = response.data.user;
+            console.log("Usser",user);
+            await AsyncStorage.multiSet([['token', token], ['user', JSON.stringify(user)]]);
             if (response.status) { setIsLoggedIn(true), setuser(response.data.user) };
             return response;
         } catch (error) {

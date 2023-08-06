@@ -74,7 +74,7 @@ export type RootStackParamList = {
     ScreenFavorite: undefined,
     Favoriteenmpty: undefined,
     Detail_Product: {data: Object} | undefined,
-    RootTab: {user: Object}
+    RootTab: undefined,
 };
 export const RootStackScreensLogin = () => {
     const Screen: any = [

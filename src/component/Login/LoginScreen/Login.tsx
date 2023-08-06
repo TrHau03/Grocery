@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View, Image, TextInput, Pressable, ScrollView, Alert } from 'react-native'
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import Dialog from "react-native-dialog";
 import SelectDropdown from "react-native-select-dropdown";
 import { StackNavigationProp } from '@react-navigation/stack'
@@ -8,6 +8,7 @@ import { useNavigation } from '@react-navigation/native';
 import { UserContext } from '../API/LoginProvider';
 import { useDispatch } from 'react-redux';
 import { fetchInitialUser } from '../../App/Slice/todoSlice';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 type DemoNavigaDrop = StackNavigationProp<RootStackParamList, RootStackScreenENum.Login>
 const countriesWithFlags = [
   { image: require("../../../assets/images/Han-Quoc.png") },
@@ -22,6 +23,7 @@ interface User {
 }
 const Login = () => {
   const usenavigation = useNavigation<DemoNavigaDrop>();
+  
   const { login } = useContext(UserContext);
   const [visible, setVisible] = useState(false);
   const [phone, setPhone] = useState<any>('');
@@ -29,6 +31,7 @@ const Login = () => {
   const [password, setPassword] = useState<string>('haunho');
   const [hidePass, setHidePass] = useState<Boolean>(true);
   const dispatch = useDispatch();
+  
   const handleLogin = async () => {
     const checkLogin = await login(email, password);
     console.log("checklogin",checkLogin);

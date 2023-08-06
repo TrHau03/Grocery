@@ -14,8 +14,6 @@ const Profile = (props: any) => {
 
   const [notificationsEnabled, setNotificationsEnabled] = useState(false);
   const user = useSelector(User);
-  console.log("User",user);
-  
   const navigateToEditProfile = () => {
 
   };
@@ -92,9 +90,9 @@ const Profile = (props: any) => {
           </View>
           <SelectDropdown data={language}
             defaultValue={'English'}
-            buttonStyle = {styles.textLanguage}
-            buttonTextStyle = {{color: '#804F1E', marginRight: 50}}
-            dropdownStyle={{backgroundColor: '#F3F3F3', borderRadius: 5, position: 'relative', left: '45%'}}
+            buttonStyle={styles.textLanguage}
+            buttonTextStyle={{ color: '#804F1E', marginRight: 50 }}
+            dropdownStyle={{ backgroundColor: '#F3F3F3', borderRadius: 5, position: 'relative', left: '45%' }}
             onSelect={(selectedItem, index) => {
               console.log(selectedItem, index)
             }}
