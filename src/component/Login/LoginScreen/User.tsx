@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View, Image, Pressable, ScrollView } from 'react-native'
-import React, { useEffect } from 'react'
+import React, { useContext, useEffect } from 'react'
 import Login from './Login';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList, RootStackScreenENum } from '../../Root/RootStack';
@@ -7,10 +7,13 @@ import { useNavigation } from '@react-navigation/native';
 import { fetchInitialUser } from '../../App/Slice/todoSlice';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useDispatch } from 'react-redux';
+import { UserContext } from '../API/LoginProvider';
 
 type DemoNavigaDrop = StackNavigationProp<RootStackParamList, RootStackScreenENum.User>
 const User = () => {
     const usenavigation = useNavigation<DemoNavigaDrop>();
+    const { checkToken } = useContext(UserContext);
+
     const dispatch = useDispatch();
     useEffect(() => {
         setTimeout(() => {
@@ -19,11 +22,14 @@ const User = () => {
     })
     const handleGetToken = async () => {
         const dataToken = await AsyncStorage.getItem('token');
-        const user :any = await AsyncStorage.getItem('user');
+        console.log("Token in Storage", dataToken);
+        
+        const check = await checkToken(dataToken);
+        console.log(check);
+        
+        const user: any = await AsyncStorage.getItem('user');
         const parseUser = JSON.parse(user);
-        console.log("data", dataToken);
-        console.log("data", user);
-        if (!dataToken) {
+        if (!check) {
             usenavigation.navigate(RootStackScreenENum.Login);
         } else {
             dispatch(fetchInitialUser(parseUser));

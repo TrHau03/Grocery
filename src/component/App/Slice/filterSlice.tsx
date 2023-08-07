@@ -82,9 +82,6 @@ export const filterSlice = createSlice({
             
             state.filters.status = action.payload;
         },
-        getAllProduct: (state, action) => {
-            state.listProduct = action.payload;
-        }
     },
     extraReducers: (builder) => {
         builder

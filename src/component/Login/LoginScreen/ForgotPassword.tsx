@@ -60,11 +60,12 @@ const ForgotPassword = ({ route }: any) => {
             </View>
             {(textBtn) ?
                 <View style={myStyle.input}>
+                    
                     <Image
                         style={myStyle.imgVector}
                         source={require("../../../assets/images/padlock.png")}
                     />
-                    <TextInput style={myStyle.txtInput} placeholder="Confirm Password" />
+                    <TextInput style={myStyle.txtInput} placeholder="Code" />
 
                 </View> : <></>
             }

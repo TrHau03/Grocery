@@ -36,7 +36,19 @@ export const UserProvider = (props: any) => {
         }
         return false;
     }
-
+    const checkToken = async (access_token:any) =>{
+        
+        try {
+            const response = await AxiosInstance().post('/user/checkToken',
+                {
+                    access_token: access_token
+                });
+            return response.status;
+        } catch (error) {
+            console.log('CheckToken Error: ', error);
+        }
+        return false;
+    }
     const register = async (email: User, name: User, password: User, confirmPassword: User) => {
         try {
             console.log(email, name, password);
@@ -74,7 +86,7 @@ export const UserProvider = (props: any) => {
     }
     return (
         <UserContext.Provider
-            value={{ isLoggedIn, user, login, register, forgotPassword }}>
+            value={{ isLoggedIn, user, login, register, forgotPassword,checkToken }}>
             {children}
         </UserContext.Provider>
     )
