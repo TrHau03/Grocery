@@ -6,7 +6,7 @@ import { UserContext } from '../Login/API/LoginProvider'
 
 
 const AppNavigation = () => {
-    const { isLoggedIn ,user} = useContext(UserContext);
+    const { isLoggedIn} = useContext(UserContext);
     return (
         <NavigationContainer>
             {isLoggedIn ? <RootTab /> : <LoginNavigation  />}

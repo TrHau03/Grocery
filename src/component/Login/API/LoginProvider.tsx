@@ -16,8 +16,8 @@ interface User {
 }
 export const UserProvider = (props: any) => {
     const { children } = props;
-    const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
     const [user, setuser] = useState<Object>();
+    const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
     const login = async (email: User, password: User) => {
         try {
             const response = await AxiosInstance().post('/user/login',
@@ -27,22 +27,27 @@ export const UserProvider = (props: any) => {
                 });
             const token = response.data.access_token;
             const user = response.data.user;
-            console.log("Usser",user);
-            await AsyncStorage.multiSet([['token', token], ['user', JSON.stringify(user)]]);
-            if (response.status) { setIsLoggedIn(true), setuser(response.data.user) };
+            const refreshToken = response.data.refresh_token ;
+            console.log("Usser", JSON.stringify(user));
+            await AsyncStorage.multiSet([['token', token],['refreshToken', refreshToken],['user', JSON.stringify(user)]]);
+            if (response.status) { setIsLoggedIn(true); setuser(user)};
+            console.log(response.status);
+            
             return response;
         } catch (error) {
             console.log('Login Error: ', error);
         }
         return false;
     }
-    const checkToken = async (access_token:any) =>{
-        
+    const checkToken = async (access_token: any) => {
+
         try {
             const response = await AxiosInstance().post('/user/checkToken',
                 {
                     access_token: access_token
                 });
+                console.log("CheckToken", response);
+                
             return response.status;
         } catch (error) {
             console.log('CheckToken Error: ', error);
@@ -84,9 +89,28 @@ export const UserProvider = (props: any) => {
         }
         return false;
     }
+    const refreshToken = async (email: string, refreshToken: string) => {
+        try {
+            console.log(email, refreshToken);
+            
+            const response = await AxiosInstance().post('/user/refresh_token', {
+                email: email,
+                refreshToken: refreshToken,
+            });
+            if (response.status) {
+                console.log("refreshToken", response.status);
+                await AsyncStorage.setItem('token', response.data.access_token );
+                return true;
+            }
+            return false;
+        } catch (error: any) {
+            console.log(error);
+
+        }
+    }
     return (
         <UserContext.Provider
-            value={{ isLoggedIn, user, login, register, forgotPassword,checkToken }}>
+            value={{ isLoggedIn,user, login, register, forgotPassword, checkToken,refreshToken }}>
             {children}
         </UserContext.Provider>
     )

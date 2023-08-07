@@ -4,7 +4,7 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList, RootStackScreenENum } from '../../Root/RootStack';
 import { useNavigation } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
-import { todoCateSelector, todoRemainingSelectProduct } from '../../Redux/selector';
+import { User, todoCateSelector, todoRemainingSelectProduct } from '../../Redux/selector';
 import { fetchInitialData, filterSlice } from '../Slice/filterSlice';
 import { todoSlice } from '../Slice/todoSlice';
 import Dialog from "react-native-dialog";
@@ -23,6 +23,7 @@ type DemoNavigaDrop = StackNavigationProp<RootStackParamList, RootStackScreenENu
 
 
 const ScreenFruits = (props: any): JSX.Element => {
+    const user = useSelector(User);
     console.log("check", props.route.params);
     const name = props.route.params.cateName;
     const usenavigation = useNavigation<DemoNavigaDrop>();
@@ -32,141 +33,141 @@ const ScreenFruits = (props: any): JSX.Element => {
         dispatch(
             filterSlice.actions.statusFilterChange(name)
         )
-}, [name])
-const [checkDispatch, setcheckDispatch] = useState<boolean>(true);
-const [visible, setVisible] = useState<boolean>(false);
-const [search, setSearch] = useState<string>('');
-const [selectedCategory, setSelectedCategory] = useState<string>(name);
-useEffect(() => {
-    setSelectedCategory(name);
-}, [name])
-const [refresh, setRefresh] = useState<boolean>(false);
-const todoList = useSelector(todoRemainingSelectProduct);
-let listCategory = useSelector(todoCateSelector);
-const dispatch = useDispatch();
-if (checkDispatch) {
-    dispatch(fetchInitialData());
-    setcheckDispatch(false)
-}
-const All = {
-    key: 0,
-    name: 'All',
-}
-const newlistCategory = [All, ...listCategory];
-const handlSearch = (e: any) => {
-    console.log("Value", e);
-    setSearch(e);
-    dispatch(
-        filterSlice.actions.searchFilterChange(
-            e
-        )
-    )
-}
-const handleAddtoCard = ({ key, img, name, price, quantity }: Product) => {
-    dispatch(todoSlice.actions.addToDoCard({ key, img, name, price, quantity }))
-}
-
-const handleCategoryClick = (category: any) => {
-    if (category.name) {
-        setSelectedCategory(category.name);
-    } else {
-        setSelectedCategory(category.name);
-    }
-    setTitle(category.name)
-    dispatch(
-        filterSlice.actions.statusFilterChange(category.name)
-    )
-};
-const refreshData = async () => {
+    }, [name])
+    const [checkDispatch, setcheckDispatch] = useState<boolean>(true);
+    const [visible, setVisible] = useState<boolean>(false);
+    const [search, setSearch] = useState<string>('');
+    const [selectedCategory, setSelectedCategory] = useState<string>(name);
+    useEffect(() => {
+        setSelectedCategory(name);
+    }, [name])
+    const [refresh, setRefresh] = useState<boolean>(false);
+    const todoList = useSelector(todoRemainingSelectProduct);
+    let listCategory = useSelector(todoCateSelector);
+    const dispatch = useDispatch();
     if (checkDispatch) {
-        setRefresh(true);
-        dispatch(fetchInitialData());
-        setRefresh(false);
-        setcheckDispatch(false);
+        dispatch(fetchInitialData(user));
+        setcheckDispatch(false)
+    }
+    const All = {
+        key: 0,
+        name: 'All',
+    }
+    const newlistCategory = [All, ...listCategory];
+    const handlSearch = (e: any) => {
+        console.log("Value", e);
+        setSearch(e);
+        dispatch(
+            filterSlice.actions.searchFilterChange(
+                e
+            )
+        )
+    }
+    const handleAddtoCard = ({ key, img, name, price, quantity }: Product) => {
+        dispatch(todoSlice.actions.addToDoCard({ key, img, name, price, quantity }))
     }
 
-};
-const renderItem = ({ item }: { item: Product }) => (
-    <TouchableOpacity key={item.key} style={styles.containerItemPD}
-        onPress={() => usenavigation.navigate(RootStackScreenENum.Detail_Product, { data: item })}>
-        <View style={styles.ImgContainerPD}>
-            <Image style={{ width: '100%', height: '100%', borderTopLeftRadius: 20, borderTopRightRadius: 20 }} source={{ uri: item.img }} />
-        </View>
-        <View style={styles.in4PD}>
-            <View style={styles.in4Text}>
-                <Text style={styles.NamePD}>{item.name}</Text>
-                <Text style={styles.QuantityPD}>{item.quantity} kg</Text>
-                <Text style={styles.PircePD}> ${item.price}</Text>
+    const handleCategoryClick = (category: any) => {
+        if (category.name) {
+            setSelectedCategory(category.name);
+        } else {
+            setSelectedCategory(category.name);
+        }
+        setTitle(category.name)
+        dispatch(
+            filterSlice.actions.statusFilterChange(category.name)
+        )
+    };
+    const refreshData = async () => {
+        if (checkDispatch) {
+            setRefresh(true);
+            dispatch(fetchInitialData());
+            setRefresh(false);
+            setcheckDispatch(false);
+        }
+
+    };
+    const renderItem = ({ item }: { item: Product }) => (
+        <TouchableOpacity key={item.key} style={styles.containerItemPD}
+            onPress={() => usenavigation.navigate(RootStackScreenENum.Detail_Product, { data: item })}>
+            <View style={styles.ImgContainerPD}>
+                <Image style={{ width: '100%', height: '100%', borderTopLeftRadius: 20, borderTopRightRadius: 20 }} source={{ uri: item.img }} />
             </View>
-            <TouchableOpacity onPress={() => { handleAddtoCard(item), setVisible(true) }}>
-                <Image source={require('../../../assets/images/ic-add.png')} style={styles.imgIC} />
-            </TouchableOpacity>
-        </View>
-    </TouchableOpacity>
-);
-return (
-    <View style={styles.container}>
-        <Dialog.Container visible={visible} >
-            <Dialog.Title>Notification</Dialog.Title>
-            <Dialog.Description>
-                Add to Card Successful
-            </Dialog.Description>
-            <Dialog.Button label="OK" onPress={() => setVisible(false)} />
-        </Dialog.Container>
-        <TouchableOpacity
-            onPress={() => usenavigation.navigate(RootStackScreenENum.ScreenExplore)}
-            style={{ marginVertical: '2%' }}>
-            <Image source={require('../../../assets/images/iconBack.png')} style={styles.imgICBack} />
-        </TouchableOpacity>
-        <View style={styles.Title}>
-            <Text style={styles.TitleHome}>{title}</Text>
-        </View>
-        <View style={styles.SearchPD}>
-            <Image source={require('../../../assets/images/ic-search.png')} style={styles.imageSearch} />
-            <TextInput
-                placeholder='Search'
-                placeholderTextColor={'rgba(109, 56, 5, 0.57)'}
-                style={styles.TextSearch}
-                value={search}
-                onChangeText={handlSearch}
-            />
-        </View>
-        <ScrollView
-            style={styles.categoryScroll}
-            horizontal={true}
-            showsHorizontalScrollIndicator={false}>
-            {newlistCategory.map((category: any) => (
-                <TouchableOpacity
-                    key={category.key}
-                    style={[
-                        styles.categoryItem
-                    ]}
-
-                    onPress={() => handleCategoryClick(category)}
-
-                >
-                    <Text style={[
-                        styles.categoryText,
-                        selectedCategory == category.name ? styles.selectedCategory : null,
-                    ]} >
-                        {category.name}
-                    </Text>
+            <View style={styles.in4PD}>
+                <View style={styles.in4Text}>
+                    <Text style={styles.NamePD}>{item.name}</Text>
+                    <Text style={styles.QuantityPD}>{item.quantity} kg</Text>
+                    <Text style={styles.PircePD}> ${item.price}</Text>
+                </View>
+                <TouchableOpacity onPress={() => { handleAddtoCard(item), setVisible(true) }}>
+                    <Image source={require('../../../assets/images/ic-add.png')} style={styles.imgIC} />
                 </TouchableOpacity>
-            ))}
-        </ScrollView>
-        {(todoList.length != 0) ?
-            <FlatList
-                style={{ height: '100%' }}
-                data={todoList}
-                renderItem={renderItem}
-                keyExtractor={(item) => item.key.toString()}
-                numColumns={2}
-                showsVerticalScrollIndicator={false}
-                refreshing={refresh}
-                onRefresh={() => { refreshData(), setcheckDispatch(true) }}
-            /> : <View><Text style={styles.TextNoData}>No DaTa</Text></View>}
-    </View>
-)
+            </View>
+        </TouchableOpacity>
+    );
+    return (
+        <View style={styles.container}>
+            <Dialog.Container visible={visible} >
+                <Dialog.Title>Notification</Dialog.Title>
+                <Dialog.Description>
+                    Add to Card Successful
+                </Dialog.Description>
+                <Dialog.Button label="OK" onPress={() => setVisible(false)} />
+            </Dialog.Container>
+            <TouchableOpacity
+                onPress={() => usenavigation.navigate(RootStackScreenENum.ScreenExplore)}
+                style={{ marginVertical: '2%' }}>
+                <Image source={require('../../../assets/images/iconBack.png')} style={styles.imgICBack} />
+            </TouchableOpacity>
+            <View style={styles.Title}>
+                <Text style={styles.TitleHome}>{title}</Text>
+            </View>
+            <View style={styles.SearchPD}>
+                <Image source={require('../../../assets/images/ic-search.png')} style={styles.imageSearch} />
+                <TextInput
+                    placeholder='Search'
+                    placeholderTextColor={'rgba(109, 56, 5, 0.57)'}
+                    style={styles.TextSearch}
+                    value={search}
+                    onChangeText={handlSearch}
+                />
+            </View>
+            <ScrollView
+                style={styles.categoryScroll}
+                horizontal={true}
+                showsHorizontalScrollIndicator={false}>
+                {newlistCategory.map((category: any) => (
+                    <TouchableOpacity
+                        key={category.key}
+                        style={[
+                            styles.categoryItem
+                        ]}
+
+                        onPress={() => handleCategoryClick(category)}
+
+                    >
+                        <Text style={[
+                            styles.categoryText,
+                            selectedCategory == category.name ? styles.selectedCategory : null,
+                        ]} >
+                            {category.name}
+                        </Text>
+                    </TouchableOpacity>
+                ))}
+            </ScrollView>
+            {(todoList.length != 0) ?
+                <FlatList
+                    style={{ height: '100%' }}
+                    data={todoList}
+                    renderItem={renderItem}
+                    keyExtractor={(item) => item.key.toString()}
+                    numColumns={2}
+                    showsVerticalScrollIndicator={false}
+                    refreshing={refresh}
+                    onRefresh={() => { refreshData(), setcheckDispatch(true) }}
+                /> : <View><Text style={styles.TextNoData}>No DaTa</Text></View>}
+        </View>
+    )
 }
 
 export default ScreenFruits

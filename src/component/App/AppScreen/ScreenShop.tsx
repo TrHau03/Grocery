@@ -26,6 +26,7 @@ const ScreenShop = ({ navigation, route }: any): JSX.Element => {
   const todoList = useSelector(todoRemainingSelectCate);
   const [visible, setVisible] = useState<boolean>(false);
   const dispatch = useDispatch();
+  
   const handleAddtoCard = ({ key, img, name, price, quantity }: Product) => {
     dispatch(todoSlice.actions.addToDoCard({ key, img, name, price, quantity }))
 }

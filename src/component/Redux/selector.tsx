@@ -38,12 +38,16 @@ export const todoRemainingSelectCate = createSelector(todoCateSelector, searchSe
     })
 });
 export const todoRemainingSelectProduct = createSelector(todoProductSelector, searchSelector, statusSelector, (listProduct, search, status) => {
+    if (listProduct) {
+        return listProduct.filter((todo: any) => {
+            if (status === 'All') {
+                return todo.name.includes(search);
+            }
+            return todo.name.includes(search) && todo.category.includes(status);
+        })
+    } else {
+        return [];
+    }
 
-    return listProduct.filter((todo: any) => {
-        if (status === 'All') {
-            return todo.name.includes(search);
-        }
-        return todo.name.includes(search) && todo.category.includes(status);
-    })
 });
 

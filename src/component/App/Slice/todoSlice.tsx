@@ -49,7 +49,7 @@ const initialState: List = {
     ],
     listCard: [
     ],
-    user:[]
+    user:{}
 }
 export const todoSlice = createSlice({
     name: 'todo',

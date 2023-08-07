@@ -2,10 +2,23 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { useContext } from "react";
 import { UserContext } from "../../Login/API/LoginProvider";
 import { AppContext } from "../API/AppProvider";
-export const fetchInitialData: any = createAsyncThunk('filters/fetchInitialData', async () => {
-    const { getAllProduct }: any = useContext(AppContext)
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useSelector } from "react-redux";
+import { User } from "../../Redux/selector";
+
+export const fetchInitialData: any = createAsyncThunk('filters/fetchInitialData', async (user :any) => {
+    const { checkToken, refreshToken } = useContext(UserContext);
+    const { getAllProduct }: any = useContext(AppContext);
+    const [[,access_token], [,token]] = await AsyncStorage.multiGet(['token', 'refreshToken']);
+    const check = await checkToken(access_token);
+    if (!check) {
+        await refreshToken(user.email, token);
+        const response = await getAllProduct();
+        return response.data;
+    }
     const response = await getAllProduct();
     return response.data;
+
 })
 export const filterSlice = createSlice({
     name: 'filters',
@@ -70,7 +83,7 @@ export const filterSlice = createSlice({
             name: 'Snacks',
             color: '#FFE0B2',
         }],
-        listProduct: []
+        listProduct: [],
 
     },
     reducers: {
@@ -79,7 +92,7 @@ export const filterSlice = createSlice({
         },
         statusFilterChange: (state, action) => {
             console.log(action.payload);
-            
+
             state.filters.status = action.payload;
         },
     },
