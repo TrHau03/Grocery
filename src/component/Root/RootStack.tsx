@@ -23,6 +23,8 @@ import Detail_Product from "../App/AppScreen/Detail_Product";
 import { RootTab } from "../App/AppNavigation/AppNavigation";
 import Favoriteenmpty from "../App/AppScreen/Favoriteenmpty";
 import ForgotPassword from "../Login/LoginScreen/ForgotPassword";
+import ChangePassword from "../Login/LoginScreen/ChangePassword";
+
 export enum RootStackScreenENum {
     User = 'User',
     Login = 'Login',
@@ -48,6 +50,7 @@ export enum RootStackScreenENum {
     ScreenFavorite = 'ScreenFavorite',
     Favoriteenmpty = 'Favoriteenmpty',
     Detail_Product = 'Detail_Product',
+    ChangePassword = 'ChangePassword',
 
 };
 export type RootStackParamList = {
@@ -75,6 +78,7 @@ export type RootStackParamList = {
     Favoriteenmpty: undefined,
     Detail_Product: {data: Object} | undefined,
     RootTab: undefined,
+    ChangePassword: undefined
 };
 export const RootStackScreensLogin = () => {
     const Screen: any = [
@@ -84,6 +88,7 @@ export const RootStackScreensLogin = () => {
         { id: 8, name: RootStackScreenENum.RegisterCode, component: RegisterCode, option: {} },
         { id: 9, name: RootStackScreenENum.RegisterPass, component: RegisterPass, option: {} },
         { id: 20, name: RootStackScreenENum.ForgotPassword, component: ForgotPassword, option: {} },
+        { id: 21, name: RootStackScreenENum.ChangePassword, component: ChangePassword, option: {} },
         { id: 18, name: RootStackScreenENum.RootTab, component: RootTab, option: {} },
 
     ]

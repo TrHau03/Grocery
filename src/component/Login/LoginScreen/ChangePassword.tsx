@@ -5,32 +5,23 @@ import { StackNavigationProp } from '@react-navigation/stack'
 import { RootStackParamList, RootStackScreenENum } from '../../Root/RootStack'
 import { useNavigation } from '@react-navigation/native';
 import { UserContext } from "../API/LoginProvider";
-import { ToastContainer, toast } from 'react-toastify';
 type DemoNavigaDrop = StackNavigationProp<RootStackParamList, RootStackScreenENum.ForgotPassword>
-const ForgotPassword = ({ route }: any) => {
+const ChangePassword = ({ route }: any) => {
     const { forgotPassword } = useContext(UserContext);
     const [email, setemail] = useState<string>('');
     const [visible, setVisible] = useState(false);
     const [textBtn, settextBtn] = useState<boolean>(false);
     const [code, setCode] = useState<string>('');
-    const [registerCode, setregisterCode] = useState<string>('');
-    const [resgisterStatus, setresgisterStatus] = useState<boolean>(false);
     const usenavigation = useNavigation<DemoNavigaDrop>();
-    const handleForgot = async () => {
-        if (email) {
-            const checkRegister = await forgotPassword(email);
-            if (checkRegister.status) setVisible(true), setregisterCode(checkRegister.data), setresgisterStatus(true);
-        }
-    }
-    const handleChangePassword = () => {
-        console.log(registerCode, code);
-        if (registerCode == code){
-            usenavigation.navigate(RootStackScreenENum.ChangePassword)
-        }else{
-            toast("Wow so easy!");
-        }
-    }
-
+    // const handdleForgot = async () => {
+    //     if(email){
+    //         const checkRegister = await forgotPassword(email);
+    //     console.log(checkRegister.data);
+    //     if(checkRegister.data.code == code) 
+    //     if (checkRegister.status) setVisible(true);
+    //     }
+    // }
+    
     return (
         <ScrollView style={myStyle.Container}>
             <Dialog.Container visible={visible} contentStyle={{ borderRadius: 10 }} >
@@ -67,35 +58,30 @@ const ForgotPassword = ({ route }: any) => {
                     style={myStyle.imgVector}
                     source={require("../../../assets/images/padlock.png")}
                 />
-                <TextInput style={myStyle.txtInput} placeholder="Email" value={email} onChangeText={setemail} />
+                <TextInput style={myStyle.txtInput} placeholder="New password" value={email} onChangeText={setemail}/>
 
             </View>
-            {(textBtn) ?
                 <View style={myStyle.input}>
-
+                    
                     <Image
                         style={myStyle.imgVector}
                         source={require("../../../assets/images/padlock.png")}
                     />
-                    <TextInput style={myStyle.txtInput} placeholder="Code" value={code} onChangeText={setCode} />
+                    <TextInput style={myStyle.txtInput} placeholder="Confirm new password"  />
 
-                </View> : <></>
-            }
+                </View> 
             <View style={myStyle.Next}>
                 <Pressable style={myStyle.btnNext}
-                    onPress={() => { !resgisterStatus ? handleForgot() :handleChangePassword(), settextBtn(true) }}
+                    onPress={() => {settextBtn(true) }}
                 >
-                    {(resgisterStatus) ?
-                        <Text style={myStyle.txtNext}>Next</Text>
-                        : <Text style={myStyle.txtNext}>Send</Text>
-                    }
+                    <Text style={myStyle.txtNext}>Send</Text>
                 </Pressable>
             </View>
         </ScrollView>
     );
 };
 
-export default ForgotPassword;
+export default ChangePassword;
 
 const myStyle = StyleSheet.create({
     txtNext: {

@@ -6,15 +6,22 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useSelector } from "react-redux";
 import { User } from "../../Redux/selector";
 
-export const fetchInitialData: any = createAsyncThunk('filters/fetchInitialData', async (user :any) => {
+export const fetchInitialData: any = createAsyncThunk('filters/fetchInitialData', async () => {
     const { checkToken, refreshToken } = useContext(UserContext);
     const { getAllProduct }: any = useContext(AppContext);
-    const [[,access_token], [,token]] = await AsyncStorage.multiGet(['token', 'refreshToken']);
+    const [[, access_token], [, token]] = await AsyncStorage.multiGet(['token', 'refreshToken']);
+    const user:any = await AsyncStorage.getItem('user');
+    const parseUser = JSON.parse(user);
+    console.log("AccessStore", access_token);
     const check = await checkToken(access_token);
     if (!check) {
-        await refreshToken(user.email, token);
-        const response = await getAllProduct();
-        return response.data;
+        console.log("user", parseUser);
+        const refresh_Token = await refreshToken(parseUser.email, token);
+        if (refresh_Token) {
+            console.log("refresh");
+            const response = await getAllProduct();
+            return response.data;
+        }
     }
     const response = await getAllProduct();
     return response.data;

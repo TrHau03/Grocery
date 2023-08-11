@@ -8,6 +8,7 @@ import { User, todoCateSelector, todoRemainingSelectProduct } from '../../Redux/
 import { fetchInitialData, filterSlice } from '../Slice/filterSlice';
 import { todoSlice } from '../Slice/todoSlice';
 import Dialog from "react-native-dialog";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 interface Product {
     key: number,
@@ -23,8 +24,6 @@ type DemoNavigaDrop = StackNavigationProp<RootStackParamList, RootStackScreenENu
 
 
 const ScreenFruits = (props: any): JSX.Element => {
-    const user = useSelector(User);
-    console.log("check", props.route.params);
     const name = props.route.params.cateName;
     const usenavigation = useNavigation<DemoNavigaDrop>();
     const [title, setTitle] = useState<string>(name);
@@ -46,8 +45,8 @@ const ScreenFruits = (props: any): JSX.Element => {
     let listCategory = useSelector(todoCateSelector);
     const dispatch = useDispatch();
     if (checkDispatch) {
-        dispatch(fetchInitialData(user));
-        setcheckDispatch(false)
+        dispatch(fetchInitialData());
+        setcheckDispatch(false);
     }
     const All = {
         key: 0,
@@ -81,6 +80,8 @@ const ScreenFruits = (props: any): JSX.Element => {
     const refreshData = async () => {
         if (checkDispatch) {
             setRefresh(true);
+            console.log("Fech");
+
             dispatch(fetchInitialData());
             setRefresh(false);
             setcheckDispatch(false);
@@ -164,7 +165,7 @@ const ScreenFruits = (props: any): JSX.Element => {
                     numColumns={2}
                     showsVerticalScrollIndicator={false}
                     refreshing={refresh}
-                    onRefresh={() => { refreshData(), setcheckDispatch(true) }}
+                    onRefresh={() => { setcheckDispatch(true), refreshData() }}
                 /> : <View><Text style={styles.TextNoData}>No DaTa</Text></View>}
         </View>
     )

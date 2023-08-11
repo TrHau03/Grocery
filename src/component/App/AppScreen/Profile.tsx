@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Switch } from 'react-native';
+import React, { useState,useContext } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, Switch, Pressable } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
@@ -7,11 +7,17 @@ import { RootStackParamList, RootStackScreenENum } from '../../Root/RootStack';
 import SelectDropdown from 'react-native-select-dropdown';
 import { useSelector } from 'react-redux';
 import { User } from '../../Redux/selector';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { UserContext } from '../../Login/API/LoginProvider';
 
 type DemoNavigaDrop = StackNavigationProp<RootStackParamList, RootStackScreenENum.Profile>
 
 const Profile = (props: any) => {
-
+  const {setIsLoggedIn} = useContext(UserContext);
+  const logout = async () =>{
+    await AsyncStorage.multiSet([['token', ''], ['refreshToken', '']]);
+    setIsLoggedIn(false);
+  }
   const [notificationsEnabled, setNotificationsEnabled] = useState(false);
   const user = useSelector(User);
   const navigateToEditProfile = () => {
@@ -111,10 +117,10 @@ const Profile = (props: any) => {
       </View>
       <View style={styles.menuSection}>
         <TouchableOpacity style={styles.menuItem}>
-          <View style={styles.menuItemContent}>
+          <Pressable style={styles.menuItemContent} onPress={ logout}>
             <Icon name="sign-out" size={24} style={styles.menuItemIcon} color="#804F1E" />
             <Text style={styles.menuItemNotifi}>Logout</Text>
-          </View>
+          </Pressable>
         </TouchableOpacity>
 
       </View>

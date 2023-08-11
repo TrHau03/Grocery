@@ -110,7 +110,7 @@ export const UserProvider = (props: any) => {
     }
     return (
         <UserContext.Provider
-            value={{ isLoggedIn,user, login, register, forgotPassword, checkToken,refreshToken }}>
+            value={{ isLoggedIn,setIsLoggedIn,user, login, register, forgotPassword, checkToken,refreshToken }}>
             {children}
         </UserContext.Provider>
     )

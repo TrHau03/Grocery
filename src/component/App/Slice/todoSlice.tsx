@@ -1,13 +1,15 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { useContext } from "react";
 import { UserContext } from "../../Login/API/LoginProvider";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 interface List {
-    listProdcutFavorite: Array<{key:number,img: any, category: string, name: string,quantity: number, price: number}>,
-    listAddressUser:Array<any>,
-    listCard:Array<{key:number,img: any, category: string, name: string,quantity: number, price: number}>
-    user:Object
+    listProdcutFavorite: Array<{ key: number, img: any, category: string, name: string, quantity: number, price: number }>,
+    listAddressUser: Array<any>,
+    listCard: Array<{ key: number, img: any, category: string, name: string, quantity: number, price: number }>
+    user: Object
 }
-export const fetchInitialUser: any = createAsyncThunk('todo/fetchInitialUser', async (user) => {
+export const fetchInitialUser: any = createAsyncThunk('todo/fetchInitialUser', async (user: any) => {
+    
     return user;
 })
 const initialState: List = {
@@ -49,7 +51,7 @@ const initialState: List = {
     ],
     listCard: [
     ],
-    user:{}
+    user: {}
 }
 export const todoSlice = createSlice({
     name: 'todo',
@@ -93,7 +95,7 @@ export const todoSlice = createSlice({
             .addCase(fetchInitialUser.fulfilled, (state, action) => {
                 state.user = action.payload;
             })
-            
+
     },
 
 })

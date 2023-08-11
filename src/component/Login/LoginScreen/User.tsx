@@ -13,9 +13,8 @@ import axios from 'axios';
 type DemoNavigaDrop = StackNavigationProp<RootStackParamList, RootStackScreenENum.User>
 const User = () => {
     const usenavigation = useNavigation<DemoNavigaDrop>();
-    
-    
-    const { checkToken } = useContext(UserContext);
+    const { setIsLoggedIn,refreshToken,checkToken } = useContext(UserContext)
+
 
     const dispatch = useDispatch();
     useEffect(() => {
@@ -26,13 +25,19 @@ const User = () => {
     const handleGetToken = async () => {
         const dataToken = await AsyncStorage.getItem('token');
         console.log("Token in Storage", dataToken);
-        const check = await checkToken(dataToken);
-        console.log(check);
         const user: any = await AsyncStorage.getItem('user');
         const parseUser = JSON.parse(user);
-        if (check) {
-            dispatch(fetchInitialUser(parseUser));
-            usenavigation.navigate(RootStackScreenENum.RootTab);
+        dispatch(fetchInitialUser(parseUser));
+        const check = await checkToken(dataToken);
+        if (!check) {
+            const token = await AsyncStorage.getItem('refreshToken');
+            console.log(parseUser.email);
+            const refresh_Token =  await refreshToken(parseUser.email, token);
+            if(refresh_Token){
+                setIsLoggedIn(true);
+            }
+        } else {
+            setIsLoggedIn(true);
         }
     }
     return (

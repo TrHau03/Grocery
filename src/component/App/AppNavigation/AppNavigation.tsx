@@ -4,8 +4,11 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { RootStackScreensAccount, RootStackScreensCart, RootStackScreensExplore, RootStackScreensFavorite, RootStackScreensLogin, RootStackScreensShop, configStack } from '../../Root/RootStack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { RootTabScreens, configTab } from '../../Root/RootTabParams';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { fetchInitialUser } from '../Slice/todoSlice';
 const Tab = createBottomTabNavigator();
-export const RootTab = (): React.JSX.Element => {
+export const RootTab =  (): React.JSX.Element => {
+  
   return <Tab.Navigator initialRouteName='Shop' screenOptions={({ route }) => configTab(route)}>
     {
       RootTabScreens().map((item, index) => <Tab.Screen key={item.id} name={item.name} component={item.component} options={item.option} />)
